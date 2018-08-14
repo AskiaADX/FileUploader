@@ -1,0 +1,86 @@
+{% 
+Dim inputName  =  CurrentQuestion.InputName()
+Dim inputValue =  CurrentQuestion.InputValue()
+
+Dim datalist    = CurrentADC.PropValue("datalist").Split("|")     
+Dim attrList    = On(datalist.Count > 0, "list=\"" + inputName + "\"", "")
+Dim i
+
+
+Dim inputType  = CurrentADC.PropValue("opensubtype")
+Dim multiline  = (CurrentADC.PropValue("multiline") = "1") ' Convert to boolean
+
+Dim maxValue = CurrentQuestion.MaxValue
+Dim attrMax  = On(maxValue <> DK, "maxLength=\"" + maxValue + "\"", "")
+
+
+Dim attrRequired = On(CurrentQuestion.IsAllowDK, "required=\"required\"", "")
+
+
+Dim uploaderCaption = CurrentADC.PropValue("uploaderCaption")
+Dim dragdropCaption = CurrentADC.PropValue("dragdropCaption")
+ 
+Dim typeOfCapture = CurrentADC.PropValue("typeOfCapture")
+
+%}
+<script>
+    var uploadConfig_{%=CurrentADC.InstanceID%} = {
+        authenticationUrl : '{%=CurrentADC.PropValue("AusUrl")%}' + "/Authenticate",
+        uploadUrl : '{%=CurrentADC.PropValue("AusUrl")%}' + "/Upload",
+        apiKey : '{%=CurrentADC.PropValue("AusApiKey")%}',
+        secretKey : '{%=CurrentADC.PropValue("AusSecretKey")%}',
+        maxfilesize : parseInt('{%=CurrentADC.PropValue("AusMaxFileSize")%}', 10),
+        ausProjectName : '{%=CurrentADC.PropValue("AusProjectName")%}',
+        shortcut : '{%=CurrentQuestion.Shortcut%}',
+        seedvalue : '{%=Interview.Seed%}',
+        guidstring : '{%=Interview.GUID%}',
+        disabledUploadBtn : '{%=  CurrentADC.PropValue("disableBtnUpload") %}',
+        allowUploadFileChange : '{%=CurrentADC.PropValue("allowUploadFileChange")%}',
+        previousFile : '',
+        ErrMsgColor : '{%=CurrentADC.PropValue("error_message_color")%}',
+        ErrMsgFileSizeExceeded : '{%=CurrentADC.PropValue("file_size_exceed_error")%}',
+        ErrMsgInvalidApiSecretKeys : '{%=CurrentADC.PropValue("invalid_api_secret_error")%}',
+        ErrMsgErrorAtUpload : '{%=CurrentADC.PropValue("error_occured_at_upload_error")%}',
+        ErrMsgSelectFile : '{%=CurrentADC.PropValue("error_select_file_error")%}',
+        ErrMsgToken : '{%=CurrentADC.PropValue("error_while_generating_token")%}',
+        SuccessMsgColor : '{%=CurrentADC.PropValue("success_message_color")%}',
+        SuccessMsg : '{%=CurrentADC.PropValue("success_message")%}',        
+    }
+</script>
+
+<div id="adc-errdiv_{%=CurrentADC.InstanceId%}">
+    <ul id="ulErrorMessages_{%=CurrentADC.InstanceID%}">
+    </ul>
+</div>
+<div id="adc-succdiv_{%=CurrentADC.InstanceId%}">
+    <span id="spanSuccessMessage_{%=CurrentADC.InstanceID%}"></span>
+</div>
+<div class="dragdrop" >
+  
+   <!-- {%=Browser.Name.ToUpperCase()%}  -->
+	<label for="adc_uploader_{%=CurrentADC.InstanceID%}" class="label_uploader btn primary">
+		<input type="file" id="adc_uploader_{%=CurrentADC.InstanceID%}" name="adc_uploader" onchange="selectedFileInfo({%=CurrentADC.InstanceId%})" hidden/>
+		{%= uploaderCaption %}
+	</label>
+    <input type="button" id="btnUpload_{%=CurrentADC.InstanceID%}" class="btn" value="{%=CurrentADC.PropValue("UploadButtonText")%}" onclick="uploadFile({%=CurrentADC.InstanceID%})" />
+</div>
+<span id="selected-file-name"></span><br /><br />
+<input type="hidden" id="HidResult_{%=CurrentADC.InstanceID%}" name="{%= inputName %}" value="" {%:= attrMax %} {%:= attrRequired %}/>
+<div id="overlay_loader_{%=CurrentADC.InstanceID%}" class="loading hidden">Loading&#8230;</div>
+
+
+
+     
+     
+
+
+
+
+
+
+
+
+
+
+
+
