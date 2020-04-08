@@ -1,4 +1,3 @@
-Version 1.0.0
-
-- Feature 1
-- Feature 2
+Version
+-------
+v1.0.1 - drag n drop bug fix on Chrome/Edge browsers

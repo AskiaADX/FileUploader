@@ -7,8 +7,8 @@
   <info>
     <name>FileUploader</name>
     <guid>d7c94a7c-10f9-4d31-8e51-82dc9c96c089</guid>
-    <version>1.0.0</version>
-    <date>2018-06-07</date>
+    <version>1.0.1</version>
+    <date>2020-04-08</date>
     <description><![CDATA[File uploader]]></description>
     <company>Askia</company>
     <author><![CDATA[Quentin Legrand <quentin@askia.com>]]></author>
@@ -36,7 +36,7 @@
     </output>
     <output id="fallback">
       <description><![CDATA[Fallback ouputs for IE\Edge, mobiles or tablets]]></description>
-      <condition><![CDATA[(Browser.Name.toUpperCase() = "INTERNET EXPLORER") Or (Browser.Mobile = 1) Or 
+      <condition><![CDATA[(Browser.Name.toUpperCase() = "INTERNET EXPLORER") Or (Browser.Mobile = 1) Or
 (Browser.UserAgent.ToUpperCase().Split("ANDROID").Count > 1) Or (Browser.UserAgent.ToUpperCase().Split("IPAD").Count > 1)]]></condition>
       <content fileName="fallback.css" type="css" mode="dynamic" position="head" />
       <content fileName="fallback_open.html" type="html" mode="dynamic" position="none" />
