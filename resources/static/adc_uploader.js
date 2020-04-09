@@ -1,3 +1,6 @@
+var browser;
+var file;
+
 function showOverlay(instanceId){
     removeClass(getElementByDynamicId("overlay_loader", instanceId),'hidden');
 }
@@ -14,7 +17,7 @@ function uploadFile(instanceId){
 		displayErrorMessage(uploadConfig(instanceId).ErrMsgInvalidApiSecretKeys, instanceId);
         return;
     }
-    
+
     if(fileSelected(instanceId)){
         if(validFileSize(instanceId)){
             generateNewToken(function(token){
@@ -35,37 +38,48 @@ function uploadFile(instanceId){
 
 
 function dropFile(event, instanceId, browserName) {
-    var browser = getBrowser();
+    browser = browserName;
     var files = event.dataTransfer.files;
-	if (files.length == 1) {
-        if (browser.name.toUpperCase() == 'CHROME' ) {
-            document.getElementById("adc_uploader_"+ instanceId).files = files;
-        }
-        if (browser.name.toUpperCase() == 'FIREFOX') {        
-            document.getElementById("adc_uploader_"+ instanceId).files = files;
-            selectedFileInfo(instanceId);
+	  if (files.length == 1) {
+        if (browserName == 'MICROSOFT EDGE') {
+          // document.getElementById("adc_uploader_"+ instanceId).files = files;
+          file = files[0];
+          selectedFileInfo(instanceId,files);
+        } else {
+          document.getElementById("adc_uploader_"+ instanceId).files = files;
+          selectedFileInfo(instanceId);
         }
     } else {
     	document.getElementById("selected-file-name").innerHTML = "<b>You can select only one file.</b>";
       	getElementByDynamicId("adc_uploader", instanceId).value = "";
     }
-  
+
 }
 
 
 function fileSelected(instanceId){
-    var fileData = getElementByDynamicId("adc_uploader", instanceId).files[0];
+    var fileData;
+    if (browser == 'MICROSOFT EDGE') {
+        fileData = file;
+    } else {
+        fileData = getElementByDynamicId("adc_uploader", instanceId).files[0];
+    }
     return fileData!=undefined;
 }
 
 function validFileSize(instanceId){
-    var fileData = getElementByDynamicId("adc_uploader", instanceId).files[0];
+    var fileData;
+    if (browser == 'MICROSOFT EDGE') {
+        fileData = file;
+    } else {
+        fileData = getElementByDynamicId("adc_uploader", instanceId).files[0];
+    }
     var filesize = 0;
     var maxsize = uploadConfig(instanceId).maxfilesize;
     if (fileData) {
         filesize = fileData.size / 1024;
     }
-    
+
     if (fileData && filesize > maxsize) {
         return false;
     }
@@ -96,14 +110,19 @@ function generateNewToken(callback, instanceId) {
 
 }
 
-function sendFileTransferCall(instanceId) {    
+function sendFileTransferCall(instanceId) {
     if(!uploadConfig(instanceId).token){
         displayErrorMessage(uploadConfig(instanceId).ErrMsgToken, instanceId);
         return;
-    }  
+    }
 
     var projectName = uploadConfig(instanceId).ausProjectName;
-    var fileData = getElementByDynamicId("adc_uploader", instanceId).files[0];
+    var fileData;
+    if (browser == 'MICROSOFT EDGE') {
+        fileData = file;
+    } else {
+        fileData = getElementByDynamicId("adc_uploader", instanceId).files[0];
+    }
     var shortcut = uploadConfig(instanceId).shortcut;
     var seed = uploadConfig(instanceId).seedvalue;
     var guid = uploadConfig(instanceId).guidstring;
@@ -129,7 +148,7 @@ function sendFileTransferCall(instanceId) {
         displayErrorMessage(uploadConfig(instanceId).ErrMsgErrorAtUpload, instanceId);
         hideOverlay(instanceId);
     };
-	
+
     sendAjaxPostCall(url, fileData, false, uploadSuccessCallback, uploadErrorCallback);
 
 }
@@ -245,13 +264,17 @@ function hideErrorMessage(instanceId){
 function getElementByDynamicId(elementId, instanceId) {
     return document.getElementById(elementId + "_" + instanceId);
 }
-                                   
+
 function uploadConfig(instanceId) {
 	return eval('uploadConfig_' + instanceId);
 }
 
-function selectedFileInfo(instanceId) {    
-    var file = getElementByDynamicId("adc_uploader", instanceId).files[0];
+function selectedFileInfo(instanceId,files) {
+    if (browser == 'MICROSOFT EDGE') {
+      file = files[0];
+    } else {
+      file = getElementByDynamicId("adc_uploader", instanceId).files[0];
+    }
     var span = document.getElementById("selected-file-name");
     Math.trunc = Math.trunc || function(x) {
         if (isNaN(x)) {
@@ -285,15 +308,15 @@ function selectedFileInfo(instanceId) {
 
 
 function getBrowser() {
-    var ua=navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || []; 
+    var ua=navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
     if(/trident/i.test(M[1])){
-        tem=/\brv[ :]+(\d+)/g.exec(ua) || []; 
+        tem=/\brv[ :]+(\d+)/g.exec(ua) || [];
         return {name:'IE',version:(tem[1]||'')};
-        }   
+        }
     if(M[1]==='Chrome'){
         tem=ua.match(/\bOPR|Edge\/(\d+)/)
         if(tem!=null)   {return {name:'Opera', version:tem[1]};}
-        }   
+        }
     M=M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
     if((tem=ua.match(/version\/(\d+)/i))!=null) {M.splice(1,1,tem[1]);}
     return {
