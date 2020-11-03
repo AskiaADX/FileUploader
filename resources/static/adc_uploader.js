@@ -27,12 +27,12 @@ function uploadFile(instanceId){
         }
         else{
             displayErrorMessage(uploadConfig(instanceId).ErrMsgFileSizeExceeded, instanceId);
-            document.getElementById("selected-file-name").innerHTML = "";
+            document.getElementById("selected-file-name-"+instanceId).innerHTML = "";
         }
     }
     else{
         displayErrorMessage(uploadConfig(instanceId).ErrMsgSelectFile, instanceId);
-        document.getElementById("selected-file-name").innerHTML = "";
+        document.getElementById("selected-file-name-"+instanceId).innerHTML = "";
     }
 }
 
@@ -50,7 +50,7 @@ function dropFile(event, instanceId, browserName) {
           selectedFileInfo(instanceId);
         }
     } else {
-    	document.getElementById("selected-file-name").innerHTML = "<b>You can select only one file.</b>";
+    	document.getElementById("selected-file-name-"+instanceId).innerHTML = "<b>You can select only one file.</b>";
       	getElementByDynamicId("adc_uploader", instanceId).value = "";
     }
 
@@ -275,7 +275,7 @@ function selectedFileInfo(instanceId,files) {
     } else {
       file = getElementByDynamicId("adc_uploader", instanceId).files[0];
     }
-    var span = document.getElementById("selected-file-name");
+    var span = document.getElementById("selected-file-name-"+instanceId);
     Math.trunc = Math.trunc || function(x) {
         if (isNaN(x)) {
             return NaN;

@@ -1,8 +1,8 @@
-{% 
+{%
 Dim inputName  =  CurrentQuestion.InputName()
 Dim inputValue =  CurrentQuestion.InputValue()
 
-Dim datalist    = CurrentADC.PropValue("datalist").Split("|")     
+Dim datalist    = CurrentADC.PropValue("datalist").Split("|")
 Dim attrList    = On(datalist.Count > 0, "list=\"" + inputName + "\"", "")
 Dim i
 
@@ -19,7 +19,7 @@ Dim attrRequired = On(CurrentQuestion.IsAllowDK, "required=\"required\"", "")
 
 Dim uploaderCaption = CurrentADC.PropValue("uploaderCaption")
 Dim dragdropCaption = CurrentADC.PropValue("dragdropCaption")
- 
+
 Dim typeOfCapture = CurrentADC.PropValue("typeOfCapture")
 
 %}
@@ -44,7 +44,7 @@ Dim typeOfCapture = CurrentADC.PropValue("typeOfCapture")
         ErrMsgSelectFile : '{%=CurrentADC.PropValue("error_select_file_error")%}',
         ErrMsgToken : '{%=CurrentADC.PropValue("error_while_generating_token")%}',
         SuccessMsgColor : '{%=CurrentADC.PropValue("success_message_color")%}',
-        SuccessMsg : '{%=CurrentADC.PropValue("success_message")%}',        
+        SuccessMsg : '{%=CurrentADC.PropValue("success_message")%}',
     }
 </script>
 
@@ -56,7 +56,7 @@ Dim typeOfCapture = CurrentADC.PropValue("typeOfCapture")
     <span id="spanSuccessMessage_{%=CurrentADC.InstanceID%}"></span>
 </div>
 <div class="dragdrop" >
-  
+
    <!-- {%=Browser.Name.ToUpperCase()%}  -->
 	<label for="adc_uploader_{%=CurrentADC.InstanceID%}" class="label_uploader btn primary">
 		<input type="file" id="adc_uploader_{%=CurrentADC.InstanceID%}" name="adc_uploader" onchange="selectedFileInfo({%=CurrentADC.InstanceId%})" hidden/>
@@ -64,23 +64,6 @@ Dim typeOfCapture = CurrentADC.PropValue("typeOfCapture")
 	</label>
     <input type="button" id="btnUpload_{%=CurrentADC.InstanceID%}" class="btn" value="{%=CurrentADC.PropValue("UploadButtonText")%}" onclick="uploadFile({%=CurrentADC.InstanceID%})" />
 </div>
-<span id="selected-file-name"></span><br /><br />
+<span id="selected-file-name-{%=CurrentADC.InstanceID%}"></span><br /><br />
 <input type="hidden" id="HidResult_{%=CurrentADC.InstanceID%}" name="{%= inputName %}" value="" {%:= attrMax %} {%:= attrRequired %}/>
 <div id="overlay_loader_{%=CurrentADC.InstanceID%}" class="loading hidden">Loading&#8230;</div>
-
-
-
-     
-     
-
-
-
-
-
-
-
-
-
-
-
-
